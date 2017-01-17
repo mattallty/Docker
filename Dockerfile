@@ -75,7 +75,7 @@ RUN wget https://github.com/cachethq/Cachet/archive/${cachet_ver}.tar.gz && \
     rm -r ${cachet_ver}.tar.gz && \
     php composer.phar install --no-dev -o && \
     rm -rf bootstrap/cache/*
-
+RUN echo cachebust
 COPY conf/.env.docker /var/www/html/.env
 
 VOLUME /var/www
