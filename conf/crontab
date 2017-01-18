@@ -1,2 +1,2 @@
 #minute hour    mday    month   wday    who         command
-*       *       *       *       *       www-data    php /var/www/html/artisan schedule:run
+*       *       *       *       *       www-data    php /var/www/html/artisan schedule:run > /dev/stdout 2>&1

@@ -37,15 +37,18 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
+RUN echo cachebust
+
 COPY conf/php-fpm-pool.conf /etc/php5/fpm/pool.d/www.conf
 COPY conf/supervisord.conf /etc/supervisor/supervisord.conf
-COPY conf/nginx-site.conf /etc/nginx/conf.d/default.conf
+COPY conf/nginx-site.conf /etc/nginx/sites-available/default
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN mkdir -p /var/www/html && \
     chown -R www-data /var/www
 
 COPY conf/crontab /etc/cron.d/artisan-schedule
+
 COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chown www-data /sbin/entrypoint.sh && \
     chmod 755 /sbin/entrypoint.sh
@@ -62,6 +65,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 WORKDIR /var/www/html/
 USER www-data
+
+RUN crontab /etc/cron.d/artisan-schedule
 
 # Install composer
 RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php');" && \
