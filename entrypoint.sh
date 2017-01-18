@@ -110,6 +110,9 @@ start_system() {
   check_database_connection
   [ -f "/var/www/.cachet-installed" ] && echo "Starting Cachet" || initialize_system
   php artisan config:cache
+  sudo service cron start
+  sudo crontab /etc/cron.d/artisan-schedule
+  sudo service cron reload
   sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
 }
 
